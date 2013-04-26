@@ -1,0 +1,30 @@
+
+<VirtualHost *:80>
+
+  ServerAdmin piousbox@gmail.com
+
+  ProxyPreserveHost On
+  ProxyVia On
+  Keepalive On
+
+  SetEnv force-proxy-request-1.0 1
+  SetEnv proxy-nokeepalive 1
+  setenv proxy-initial-not-pooled 1
+
+  ServerName <%= @server_name %>
+
+  <% @server_names.each do |name| %>
+  ServerAlias <%= name %>
+  <% end %>
+
+  <proxy>
+    Order deny,allow
+    Allow from all
+  </proxy>
+
+  <% @virtual_sites.each do |site| %>
+  ProxyPass / http://<%= site[:ip_address] %>:<%= site[:port] %>/  connectiontimeout=400 timeout=400 Keepalive=On
+  ProxyPassReverse / http://<%= site[:ip_address] %>:<%= site[:port] %>/
+  <% end %>
+
+</VirtualHost>
