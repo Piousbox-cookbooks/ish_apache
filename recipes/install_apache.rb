@@ -3,7 +3,7 @@
 # recipe ish_apache::install_apache
 #
 
-include_recipe "ish::base_apache"
+include_recipe "ish_apache::base_apache"
 
 execute 'install stuff' do
   command %{ apt-get install libapache2-mod-proxy-html libxml2-dev -y }

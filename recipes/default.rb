@@ -2,20 +2,18 @@
 # recipe ish_apache::default
 #
 
+# puts! definition
 def puts! args
   puts '+++ +++'
   puts args.inspect
 end
 
 app = data_bag_item( 'apps', node['apache2']['app_server_role'] )
-puts! app
 
 pool_members = search("node", "role:#{node['apache2']['app_server_role']} AND chef_environment:#{node.chef_environment}") || []
 
 # load balancer may be in the pool
 pool_members << node if node.run_list.roles.include?(node['apache2']['app_server_role'])
-
-puts! pool_members
 
 # we prefer connecting via local_ipv4 if 
 # pool members are in the same cloud
