@@ -3,10 +3,8 @@
 # recipe ish_apache::install_apache
 #
 
-include_recipe "ish::base_apache"
-
 execute 'install stuff' do
-  command %{ apt-get install libapache2-mod-proxy-html libxml2-dev -y }
+  command %{ apt-get install apache2 libapache2-mod-proxy-html libxml2-dev -y }
 end
 
 execute "enable proxy" do
@@ -26,9 +24,11 @@ sudo a2enmod headers
   }
 end
 
-template "/etc/apache2/ports.conf" do
-  source "ports.conf"
-end
+## Not needed, right?
+##
+# template "/etc/apache2/ports.conf" do
+#   source "etc/apache2/ports.conf.erb"
+# end
 
-node.run_list.remove("recipe[ish_apache::install_apache]")
+# node.run_list.remove("recipe[ish_apache::install_apache]")
 

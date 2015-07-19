@@ -1,0 +1,34 @@
+
+<VirtualHost *:<%= @listen_port %>>
+
+  ServerAdmin piousbox@gmail.com
+
+  ServerName <%= @server_name %>
+  ServerAlias pt.<%= @server_name %>
+  ServerAlias ru.<%= @server_name %>
+
+  KeepAlive On
+  ProxyVia On
+  ProxyPreserveHost On
+  
+  <% if @server_names %>
+    <% @server_names.each do |p| %>
+  ServerAlias <%= p %>
+  ServerAlias pt.<%= p %>
+  ServerAlias ru.<%= p %>
+    <% end %>
+  <% end %>
+
+  ProxyPreserveHost On
+  ProxyVia On
+
+  <proxy>
+    Order deny,allow
+    Allow from all
+  </proxy>
+
+  ProxyPass / http://<%= @cloud_ip -%>:<%= @cloud_port -%>/ connectiontimeout=15 timeout=45
+  ProxyPassReverse / http://<%= @cloud_ip -%>:<%= @cloud_port -%>/
+
+
+</VirtualHost>

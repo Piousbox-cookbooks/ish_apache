@@ -1,5 +1,4 @@
 
-include_recipe "ish::base_apache"
 
 ##
 ## Below, is covered by default
