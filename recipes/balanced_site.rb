@@ -35,7 +35,7 @@ template "/etc/apache2/sites-available/#{site['name']}.conf" do
   end
 
 execute "enable site" do
-  command %{ a2ensite #{site['name']} } # no .conf here!
+  command %{ a2ensite #{site['name']}.conf }
 end
 
 ## you precisely don't need this!
