@@ -14,7 +14,6 @@ end
 site = data_bag_item('utils', 'balanced_site')
 site['name']     = node['balanced_site']['name']
 site['user']     = node['balanced_site']['user'] || site['user']
-site['domain']   = node['balanced_site']['domain']
 site['domains']  = node['balanced_site']['domains'] || site['domains']
 site['port']     = node['balanced_site']['port']
 site['app_ip']   = node['balanced_site']['app_ip']
@@ -26,7 +25,6 @@ template "/etc/apache2/sites-available/#{site['name']}.conf" do
     mode "0664"
 
     variables(
-      :server_name => site['domain'],
       :server_names => site['domains'],
       :cloud_ip => (site['app_ip'] || node.ipaddress),
       :cloud_port => site['port'],

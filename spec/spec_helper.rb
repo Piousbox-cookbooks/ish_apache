@@ -7,3 +7,6 @@ def puts! args, label=""
   puts "+++ +++ #{label}"
   puts args.inspect
 end
+
+require 'net/ssh'
+require 'json'

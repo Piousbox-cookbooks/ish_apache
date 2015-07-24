@@ -3,16 +3,16 @@
 
   ServerAdmin piousbox@gmail.com
 
-  ServerName <%= @server_name %>
-  ServerAlias pt.<%= @server_name %>
-  ServerAlias ru.<%= @server_name %>
+  ServerName <%= @server_names[0] %>
+  ServerAlias pt.<%= @server_names[0] %>
+  ServerAlias ru.<%= @server_names[0] %>
 
   KeepAlive On
   ProxyVia On
   ProxyPreserveHost On
   
-  <% if @server_names %>
-    <% @server_names.each do |p| %>
+  <% if @server_names.length > 1 %>
+    <% @server_names[1..@server_names.length].each do |p| %>
   ServerAlias <%= p %>
   ServerAlias pt.<%= p %>
   ServerAlias ru.<%= p %>
