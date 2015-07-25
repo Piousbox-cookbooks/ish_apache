@@ -6,7 +6,8 @@ describe 'balanced_site recipe' do
   before :all do
     # obtain config
     @c = JSON.parse File.read "spec/spec_config.json"
-
+    puts! @c, "Config"
+    
     @prefix = "/home/piousbox/projects/rails-quick-start"
     @sudo = "echo #{@c['password']} | sudo -S "
 
@@ -43,13 +44,21 @@ describe 'balanced_site recipe' do
       ` #{@sudo} a2enmod proxy `
       ` #{@sudo} service apache2 restart `
     end
-    
+
     # run recipe
     out = `sshpass -p '#{@c['password']}' ssh #{@c['user']}@#{@c['node_ip']} "echo #{@c['password']} | sudo -S chef-client && echo $?"`
-    puts "run recipe", out
-    
-    # assert
+    puts("Output of recipe run", out) if out.lines.last != "0\n"
     out.lines.last.should eql "0\n"
+
+    # asserts
+    Net::SSH.start @c['ip_addr'], @c['user'], :password => @c['password'] do |ssh|
+      # All the domains should be wired
+      @data_bag['balanced_site']['domains'].each do |domain|
+        out = ssh.exec! "cat /etc/apache2/sites-available/#{@site_name}.conf | grep #{domain} && echo $?"
+        out.lines.last.should eql "0\n"
+      end
+    end
+    
   end
 
   it 'sanity' do
