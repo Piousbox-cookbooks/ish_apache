@@ -11,7 +11,7 @@ def puts! args, label=""
 end
 
 # config
-site = data_bag_item('utils', 'balanced_site')
+site = data_bag_item('load_balancers', 'balanced_site')
 site['name']     = node['balanced_site']['name']
 site['user']     = node['balanced_site']['user'] || site['user']
 site['domains']  = node['balanced_site']['domains'] || site['domains']

@@ -12,7 +12,7 @@ describe 'balanced_sites recipe' do
     @sudo = "echo #{@c['password']} | sudo -S "
 
     # what's the run list of this node?
-    `knife node run_list set #{@c['node_name']} "role[balanced_sites]"`
+    `knife node run_list set #{@c['node_name']} "role[balanced_sites_spec]"`
     
     @data_bag = JSON.parse File.read "#{@prefix}/data_bags/load_balancers/balanced_sites.json"
 
@@ -24,8 +24,8 @@ describe 'balanced_sites recipe' do
     puts( "Not exactly 1 node found:", out ) if !result
     result.should eql true
 
-    # The run list of this node should be exactly role[balanced_sites], same name as the recipe
-    result = out.match( "Run List:\s*role\\[balanced_sites\\]" )
+    # The run list of this node should be exactly role[balanced_sites_spec]
+    result = out.match( "Run List:\s*role\\[balanced_sites_spec\\]" )
     result = !!result
     puts( "Run list mismatch:", out ) if !result
     result.should eql true

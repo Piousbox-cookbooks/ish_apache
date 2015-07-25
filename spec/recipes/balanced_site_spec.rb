@@ -15,7 +15,7 @@ describe 'balanced_site recipe' do
     `knife node run_list set #{@c['node_name']} "role[balanced_site_spec]"`
     
     @data_bag = JSON.parse File.read "#{@prefix}/data_bags/load_balancers/balanced_site.json"
-    @site_name = @data_bag['balanced_site']['name']
+    @site_name = @data_bag['name']
 
     # @TODO: check that node exists, bootstrapped
     out = `knife search node "name:#{@c['node_name']}"`
@@ -53,7 +53,7 @@ describe 'balanced_site recipe' do
     # asserts
     Net::SSH.start @c['ip_addr'], @c['user'], :password => @c['password'] do |ssh|
       # All the domains should be wired
-      @data_bag['balanced_site']['domains'].each do |domain|
+      @data_bag['domains'].each do |domain|
         out = ssh.exec! "cat /etc/apache2/sites-available/#{@site_name}.conf | grep #{domain} && echo $?"
         out.lines.last.should eql "0\n"
       end
