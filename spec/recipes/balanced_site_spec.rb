@@ -42,6 +42,10 @@ describe 'balanced_site recipe' do
 
       # configure apache
       ` #{@sudo} a2enmod proxy `
+      ` #{@sudo} a2enmod proxy_http `
+      ` #{@sudo} a2enmod proxy_balancer `
+      ` #{@sudo} service apache2 restart `
+      ` #{@sudo} service apache2 reload `
       ` #{@sudo} service apache2 restart `
     end
 
