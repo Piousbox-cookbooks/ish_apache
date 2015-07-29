@@ -19,18 +19,18 @@ site['port']     = node['balanced_site']['port']
 site['app_ip']   = node['balanced_site']['app_ip']
 
 template "/etc/apache2/sites-available/#{site['name']}.conf" do
-    source "etc/apache2/sites-available/balanced_site.conf.erb"
-    owner site['user']
-    group site['user']
-    mode "0664"
-
-    variables(
-      :server_names => site['domains'],
-      :cloud_ip => (site['app_ip'] || node.ipaddress),
-      :cloud_port => site['port'],
-      :listen_port => site['listen_port'] || "80"
-    )
-  end
+  source "etc/apache2/sites-available/balanced_site.conf.erb"
+  owner site['user']
+  group site['user']
+  mode "0664"
+  
+  variables(
+    :server_names => site['domains'],
+    :cloud_ip => (site['app_ip'] || node.ipaddress),
+    :cloud_port => site['port'],
+    :listen_port => site['listen_port'] || "80"
+  )
+end
 
 execute "enable site" do
   command %{ a2ensite #{site['name']}.conf }
