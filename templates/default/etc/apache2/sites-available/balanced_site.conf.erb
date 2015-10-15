@@ -6,10 +6,6 @@
   ServerName <%= @server_names[0] %>
   ServerAlias pt.<%= @server_names[0] %>
   ServerAlias ru.<%= @server_names[0] %>
-
-  KeepAlive On
-  ProxyVia On
-  ProxyPreserveHost On
   
   <% if @server_names.length > 1 %>
     <% @server_names[1..@server_names.length].each do |p| %>
@@ -18,6 +14,10 @@
   ServerAlias ru.<%= p %>
     <% end %>
   <% end %>
+
+  KeepAlive On
+  ProxyVia On
+  ProxyPreserveHost On
 
   ProxyPreserveHost On
   ProxyVia On
