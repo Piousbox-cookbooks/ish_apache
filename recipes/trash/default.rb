@@ -1,5 +1,10 @@
+
 #
 # recipe ish_apache::default
+#
+# @OBSOLETE!
+# I don't even know what it does.
+# _vp_ 20151226
 #
 
 def puts! args

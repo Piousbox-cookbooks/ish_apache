@@ -5,6 +5,8 @@
 # Sends traffic between a load balancer and virtual sites via proxy.
 #
 
+include_recipe "ish_apache::install_apache"
+
 def puts! args, label=""
   puts "+++ +++ #{label}"
   puts args.inspect

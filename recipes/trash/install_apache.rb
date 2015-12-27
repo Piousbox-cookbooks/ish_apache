@@ -2,6 +2,9 @@
 #
 # recipe ish_apache::install_apache
 #
+# OBSOLETE! use apache2::default, apache2::mod_*
+# _vp_ 20151226
+#
 
 execute 'install stuff' do
   command %{ apt-get install apache2 libapache2-mod-proxy-html libxml2-dev -y }
