@@ -41,10 +41,7 @@ end
 
 apache_site site['name'] do
   enable :true
-end
-
-service "apache2" do
-  action :restart
+  notifies :reload, "service[apache2]", :immediately
 end
 
 

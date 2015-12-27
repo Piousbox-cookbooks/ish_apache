@@ -38,9 +38,7 @@ end
 #  not_if { ::File.read("/etc/apache2/ports.conf").include?("NameVirtualHost *:#{site['port']}") }
 #end
 
-apache_site site['name']
-
-service 'apache2' do
-  action :reload
+apache_site site['name'] do
+  notifies :reload, "service[apache2]", :immediately
 end
 

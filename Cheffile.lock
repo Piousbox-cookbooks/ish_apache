@@ -68,6 +68,5 @@ PATH
 
 DEPENDENCIES
   apache2 (>= 0)
-  ish (>= 0)
   ish_apache (>= 0)
 

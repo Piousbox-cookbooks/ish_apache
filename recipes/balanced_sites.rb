@@ -28,14 +28,13 @@ sites.each do |site|
     )
   end
 
-  execute "enable site" do
-    command %{ a2ensite #{site['name']}.conf }
+  apache_site site['name'] do
+    enable :true
+    notifies :reload, "service[apache2]", :delayed
   end
+
 end
 
-service "apache2" do
-  action :restart
-end
 
 
 
