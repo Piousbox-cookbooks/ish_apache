@@ -5,13 +5,9 @@
 # Sends traffic between a load balancer and a virtual site via proxy.
 #
 
-def puts! args, label=""
-  puts "+++ +++ #{label}"
-  puts args.inspect
-end
+include_recipe "ish_apache::install_apache"
 
-# config
-site = data_bag_item('load_balancers', 'balanced_site')
+site = data_bag_item('load_balancers', 'default_balanced_site')
 site['name']     = node['balanced_site']['name']
 site['user']     = node['balanced_site']['user'] || site['user']
 site['domains']  = node['balanced_site']['domains'] || site['domains']
@@ -32,10 +28,6 @@ template "/etc/apache2/sites-available/#{site['name']}.conf" do
   )
 end
 
-execute "enable site" do
-  command %{ a2ensite #{site['name']}.conf }
-end
-
 ## you precisely don't need this!
 ##
 #execute "open this port" do
@@ -47,8 +39,12 @@ end
 #  not_if { ::File.read("/etc/apache2/ports.conf").include?("NameVirtualHost *:#{site['port']}") }
 #end
 
-execute "restart apache2" do
-  command %{ service apache2 reload }
+apache_site site['name'] do
+  enable :true
+end
+
+service "apache2" do
+  action :restart
 end
 
 

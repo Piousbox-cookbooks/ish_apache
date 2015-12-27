@@ -1,12 +1,8 @@
-Description
-===========
 
-Requirements
-============
+[![Build Status](https://travis-ci.org/Piousbox-cookbooks/ish_apache.svg)](https://travis-ci.org/Piousbox-cookbooks/ish_apache)
 
-Attributes
-==========
-
-Usage
+About
 =====
+
+Recipes in this cookbook configure load balancing and proxying apache2.
 

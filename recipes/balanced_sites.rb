@@ -5,18 +5,13 @@
 # Sends traffic between a load balancer and virtual sites via proxy.
 #
 
-include_recipe "ish_apache::install_apache"
+include_recipe "apache2::default"
+include_recipe "apache2::mod_proxy"
+include_recipe "apache2::mod_proxy_http"
+include_recipe "apache2::mod_rewrite"
 
-def puts! args, label=""
-  puts "+++ +++ #{label}"
-  puts args.inspect
-end
-
-# config
-sites = data_bag_item('load_balancers', 'balanced_sites')['balanced_sites']
+sites = data_bag_item('load_balancers', 'balanced_sites')
 sites = node['balanced_sites'] || sites
-
-puts! sites, "sites are"
 
 sites.each do |site|
   template "/etc/apache2/sites-available/#{site['name']}.conf" do
@@ -38,8 +33,8 @@ sites.each do |site|
   end
 end
 
-execute "restart apache2" do
-  command %{ service apache2 reload }
+service "apache2" do
+  action :restart
 end
 
 

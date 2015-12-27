@@ -4,36 +4,27 @@
 # Recipe     balanced_site_angular
 #
 
-def puts! args, label=""
-  puts "+++ +++ #{label}"
-  puts args.inspect
-end
+include_recipe "apache2::default"
+include_recipe "apache2::mod_proxy"
+include_recipe "apache2::mod_proxy_http"
+include_recipe "apache2::mod_rewrite"
 
-
-# config
-site = data_bag_item('load_balancers', 'balanced_site')
-site['name']     = node['balanced_site']['name']
-site['user']     = node['balanced_site']['user'] || site['user']
-site['domains']  = node['balanced_site']['domains'] || site['domains']
-site['port']     = node['balanced_site']['port']
-site['app_ip']   = node['balanced_site']['app_ip']
+site                  = data_bag_item('load_balancers', 'default_balanced_site')
+site['name']          = node['balanced_site']['name']        || site['name']
+site['user']          = node['balanced_site']['user']        || site['user']
+site['domains']       = node['balanced_site']['domains']     || site['domains']
+site['listen_port']   = node['balanced_site']['listen_port'] || site['listen_port']
 
 template "/etc/apache2/sites-available/#{site['name']}.conf" do
   source "etc/apache2/sites-available/balanced_site.conf.erb"
   owner site['user']
   group site['user']
   mode "0664"
-  
   variables(
     :server_names => site['domains'],
-    :cloud_ip => (site['app_ip'] || node.ipaddress),
-    :cloud_port => site['port'],
-    :listen_port => site['listen_port'] || "80"
+    :cloud_ip => node.ipaddress,
+    :listen_port => site['listen_port']
   )
-end
-
-execute "enable site" do
-  command %{ a2ensite #{site['name']}.conf }
 end
 
 ## you precisely don't need this!
@@ -47,9 +38,9 @@ end
 #  not_if { ::File.read("/etc/apache2/ports.conf").include?("NameVirtualHost *:#{site['port']}") }
 #end
 
-execute "restart apache2" do
-  command %{ service apache2 reload }
+apache_site site['name']
+
+service 'apache2' do
+  action :reload
 end
-
-
 
