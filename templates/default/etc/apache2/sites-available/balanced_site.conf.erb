@@ -23,8 +23,9 @@
   ProxyVia On
 
   <proxy>
-    Order deny,allow
-    Allow from all
+    # Order deny,allow
+    # Allow from all # _vp_ 20160101 @obsolete as of version 2.4 of apache.
+    Require all granted
   </proxy>
 
   ProxyPass / http://<%= @cloud_ip -%>:<%= @cloud_port -%>/ connectiontimeout=15 timeout=45
